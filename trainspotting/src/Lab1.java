@@ -19,8 +19,10 @@ public class Lab1 {
     Semaphore semA =  new Semaphore(1); // Junction A
     Semaphore semB =  new Semaphore(1); // Junction B
     Semaphore semC =  new Semaphore(1); // Junction C
-    Semaphore semM =  new Semaphore(1); // Middle section
 
+    Semaphore semM =  new Semaphore(1); // Middle section
+    Semaphore semU =  new Semaphore(1); // Upper section
+    Semaphore semL =  new Semaphore(1); // Lower section
 
 
     Thread train1 = new Thread(new TrainBehaveiour(1, speed1, semA, semB, semC));
