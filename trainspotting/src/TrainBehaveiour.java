@@ -6,7 +6,6 @@ import java.util.concurrent.Semaphore;
 public class TrainBehaveiour implements Runnable {
     private int trainId = -1;
     private int speed = 0;
-    private int[] position = {0,0};
     private TSimInterface tsim;
     private Semaphore semA;
     private Semaphore semB;
@@ -46,64 +45,45 @@ public class TrainBehaveiour implements Runnable {
     private final Point SENSOR_C_SOUTH_LOWER = new Point(3, 12);
 
 
-    public TrainBehaveiour(int trainId, int speed, int[] startingPos,
+    public TrainBehaveiour(int trainId, int speed,
                            Semaphore semA, Semaphore semB, Semaphore semC) {
         this.trainId = trainId;
-        this.position = startingPos;
         this.speed = speed;
-        this.semA = semA;
-        this.semB = semB;
-        this.semC = semC;
+        this.semA = semA; // Junction A
+        this.semB = semB; // Junction B
+        this.semC = semC; // Junction C
         this.tsim = TSimInterface.getInstance();
     }
 
     @Override
     public void run(){
         while(true){
-            sensorEventHandler();
+            try{
+                sensorEventHandler();
+
+            } catch(Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
     private void onStation() throws InterruptedException, CommandException{
-        tsim.setSpeed(this.trainId, 0);
-
-        Thread.sleep(1000 + (20 * Math.abs(this.speed)));
-
-        tsim.setSpeed(this.trainId, this.speed);
+        tsim.setSpeed(this.trainId, 0); // stop at station
+        Thread.sleep(1000 + (20 * Math.abs(this.speed))); // wait for passengers
+        tsim.setSpeed(this.trainId, this.speed); // leave station
     }
 
     private void onIntersection(Semaphore sem) throws InterruptedException, CommandException {
-        tsim.setSpeed(this.trainId, 0);
-        boolean permit;
-        do{
-            permit = sem.tryAcquire(); //TODO Check if correct
-        }while(!permit);
-        tsim.setSpeed(this.trainId, this.speed);
+        tsim.setSpeed(this.trainId, 0); // stop at junction
+        sem.acquire(); // check if train can cross
+        tsim.setSpeed(this.trainId, this.speed); // when allowed to cross, start driving
     }
 
     private void doSwitch(Point sw){
         //TODO
+
     }
 
-    /*
-    får event:
-         case coord1:
-
-            stanna tåget
-            försök aquire semaphore
-                om success:
-                    drive
-                om fail:
-                    sov tills vaken
-
-
-            break;
-
-
-         case coord 2:
-            // do stuff för annan semaphore
-         etc
-     */
     private void sensorEventHandler() throws CommandException, InterruptedException {
         SensorEvent se;
         try {
@@ -133,7 +113,6 @@ public class TrainBehaveiour implements Runnable {
             } else if (coords.equals(SENSOR_A_SOUTH)) {
                 onIntersection(this.semA);
 
-
             } else if (coords.equals(SENSOR_A_WEST)) {
                 onIntersection(this.semA);
 
@@ -144,33 +123,40 @@ public class TrainBehaveiour implements Runnable {
             } else if (coords.equals(SENSOR_B_NORTH_UPPER)) {
                 onIntersection(this.semB);
                 doSwitch(SWITCH_B_NORTH);
+
             } else if (coords.equals(SENSOR_B_NORTH_LOWER)) {
                 onIntersection(this.semB);
                 doSwitch(SWITCH_B_NORTH);
-                //TODO FIX SWITCHING
+
             } else if (coords.equals(SENSOR_B_SOUTH_UPPER)) {
                 onIntersection(this.semB);
-                doSwitch(SWITCH_B_SOUTH);
+                doSwitch(SWITCH_C_NORTH);
+
             } else if (coords.equals(SENSOR_B_SOUTH_LOWER)) {
                 onIntersection(this.semB);
-                doSwitch(SWITCH_B_SOUTH);
+                doSwitch(SWITCH_C_NORTH);
 
         // Critical section C (junction bottom left)
             } else if (coords.equals(SENSOR_C_NORTH_UPPER)) {
                 onIntersection(this.semC);
-                doSwitch(SWITCH_C_NORTH);
+                doSwitch(SWITCH_B_NORTH);
+
             } else if (coords.equals(SENSOR_C_NORTH_LOWER)) {
                 onIntersection(this.semC);
-                doSwitch(SWITCH_C_NORTH);
+                doSwitch(SWITCH_B_NORTH);
+
             } else if (coords.equals(SENSOR_C_SOUTH_UPPER)) {
                 onIntersection(this.semC);
                 doSwitch(SWITCH_C_SOUTH);
+
             } else if (coords.equals(SENSOR_C_SOUTH_LOWER)) {
                 onIntersection(this.semC);
                 doSwitch(SWITCH_C_SOUTH);
+
             } else {
                 System.err.println("Unhandled sensor at " + coords + " for train " + trainId);
             }
+
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
