@@ -2,6 +2,16 @@ import TSim.*;
 
 import java.awt.*;
 import java.util.concurrent.Semaphore;
+/*
+* TODO
+*  Make sensor 9/10 check for semaphore for the north station and switch the switch
+*  Make sensor 11/12 check for semaphore for the south station and switch the switch
+*  Make sensor 7/8 switch (2) down
+*  Make sensor 13/14 switch (3) up
+*  Change the execution order to make the switching happend after the semaphore lock
+*  Sensors before a switch need to make sure the train dont derail (13, 14, 11, 12, 9, 10, 7, 8)
+* */
+
 
 public class TrainBehaveiour implements Runnable {
     private int trainId = -1;
@@ -10,6 +20,8 @@ public class TrainBehaveiour implements Runnable {
     private Semaphore semA;
     private Semaphore semB;
     private Semaphore semC;
+    private Semaphore semN;
+    private Semaphore semS;
 
     private boolean inCritical = false;
 
@@ -46,12 +58,14 @@ public class TrainBehaveiour implements Runnable {
 
 
     public TrainBehaveiour(int trainId, int speed,
-                           Semaphore semA, Semaphore semB, Semaphore semC) {
+                           Semaphore semA, Semaphore semB, Semaphore semC, Semaphore semN, Semaphore semS) {
         this.trainId = trainId;
         this.speed = speed;
         this.semA = semA; // Junction A
         this.semB = semB; // Junction B
         this.semC = semC; // Junction C
+        this.semN = semN;
+        this.semS = semS;
         this.tsim = TSimInterface.getInstance();
     }
 

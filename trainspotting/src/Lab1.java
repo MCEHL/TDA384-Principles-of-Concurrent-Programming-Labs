@@ -20,13 +20,12 @@ public class Lab1 {
     Semaphore semB =  new Semaphore(1); // Junction B
     Semaphore semC =  new Semaphore(1); // Junction C
 
-    Semaphore semM =  new Semaphore(1); // Middle section
-    Semaphore semU =  new Semaphore(1); // Upper section
-    Semaphore semL =  new Semaphore(1); // Lower section
+    Semaphore semN =  new Semaphore(1); // NORTH section
+    Semaphore semS =  new Semaphore(1); // SOUTH section
 
 
-    Thread train1 = new Thread(new TrainBehaveiour(1, speed1, semA, semB, semC));
-    Thread train2 = new Thread(new TrainBehaveiour(2, speed2, semA, semB, semC));
+    Thread train1 = new Thread(new TrainBehaveiour(1, speed1, semA, semB, semC, semN, semS));
+    Thread train2 = new Thread(new TrainBehaveiour(2, speed2, semA, semB, semC, semN, semS));
 
     train1.start();
     train2.start();
