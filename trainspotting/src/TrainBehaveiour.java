@@ -74,13 +74,43 @@ public class TrainBehaveiour implements Runnable {
     }
 
     private void onIntersection(Semaphore sem) throws InterruptedException, CommandException {
-        tsim.setSpeed(this.trainId, 0); // stop at junction
-        sem.acquire(); // check if train can cross
-        tsim.setSpeed(this.trainId, this.speed); // when allowed to cross, start driving
+        if(inCritical){
+            sem.release();
+        }
+        else{
+            tsim.setSpeed(this.trainId, 0); // stop at junction
+            sem.acquire(); // check if train can cross
+            tsim.setSpeed(this.trainId, this.speed); // when allowed to cross, start driving
+        }
     }
 
-    private void doSwitch(Point sw){
-        //TODO
+    private void doSwitch(Point sensor){
+        /*
+        - switch b north (1) starting position is left
+        sensor_B_north_upper (7) -> switch b north (1), right
+        sensor_B_north_lower (8) -> switch b north (1), left
+
+        - switch c south (4) starting position is left
+        sensor_C_south_upper (13) -> switch c south (4), left
+        sensor_C_south_lower (14) -> switch c south (4), right
+
+         */
+        if (sensor.equals(SENSOR_STATION_N_UPPER)) {
+
+
+        } else if (sensor.equals(SENSOR_STATION_N_LOWER)) {
+
+
+        } else if (sensor.equals(SENSOR_STATION_S_UPPER)) {
+
+
+        } else if (sensor.equals(SENSOR_STATION_S_LOWER)) {
+
+        } else {
+            
+        }
+
+
 
     }
 
@@ -108,50 +138,62 @@ public class TrainBehaveiour implements Runnable {
 
         // Critical section A (junction near top)
             } else if (coords.equals(SENSOR_A_NORTH)) {
+                inCritical = !inCritical;
                 onIntersection(this.semA);
 
             } else if (coords.equals(SENSOR_A_SOUTH)) {
+                inCritical = !inCritical;
                 onIntersection(this.semA);
 
             } else if (coords.equals(SENSOR_A_WEST)) {
+                inCritical = !inCritical;
                 onIntersection(this.semA);
 
             } else if (coords.equals(SENSOR_A_EAST)) {
+                inCritical = !inCritical;
                 onIntersection(this.semA);
 
         // Critical section B (junction middle right)
             } else if (coords.equals(SENSOR_B_NORTH_UPPER)) {
+                inCritical = !inCritical;
                 onIntersection(this.semB);
-                doSwitch(SWITCH_B_NORTH);
+                doSwitch(SENSOR_B_NORTH_UPPER);
 
             } else if (coords.equals(SENSOR_B_NORTH_LOWER)) {
+                inCritical = !inCritical;
                 onIntersection(this.semB);
-                doSwitch(SWITCH_B_NORTH);
+                doSwitch(SENSOR_B_NORTH_LOWER);
 
             } else if (coords.equals(SENSOR_B_SOUTH_UPPER)) {
+                inCritical = !inCritical;
                 onIntersection(this.semB);
-                doSwitch(SWITCH_C_NORTH);
+                doSwitch(SENSOR_B_SOUTH_UPPER);
 
             } else if (coords.equals(SENSOR_B_SOUTH_LOWER)) {
+                inCritical = !inCritical;
                 onIntersection(this.semB);
-                doSwitch(SWITCH_C_NORTH);
+                doSwitch(SENSOR_B_SOUTH_LOWER);
 
         // Critical section C (junction bottom left)
             } else if (coords.equals(SENSOR_C_NORTH_UPPER)) {
+                inCritical = !inCritical;
                 onIntersection(this.semC);
-                doSwitch(SWITCH_B_NORTH);
+                doSwitch(SENSOR_C_NORTH_UPPER);
 
             } else if (coords.equals(SENSOR_C_NORTH_LOWER)) {
+                inCritical = !inCritical;
                 onIntersection(this.semC);
-                doSwitch(SWITCH_B_NORTH);
+                doSwitch(SENSOR_C_NORTH_LOWER);
 
             } else if (coords.equals(SENSOR_C_SOUTH_UPPER)) {
+                inCritical = !inCritical;
                 onIntersection(this.semC);
-                doSwitch(SWITCH_C_SOUTH);
+                doSwitch(SENSOR_C_SOUTH_UPPER);
 
             } else if (coords.equals(SENSOR_C_SOUTH_LOWER)) {
+                inCritical = !inCritical;
                 onIntersection(this.semC);
-                doSwitch(SWITCH_C_SOUTH);
+                doSwitch(SENSOR_C_SOUTH_LOWER);
 
             } else {
                 System.err.println("Unhandled sensor at " + coords + " for train " + trainId);
