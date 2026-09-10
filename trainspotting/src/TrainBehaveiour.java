@@ -15,34 +15,36 @@ public class TrainBehaveiour implements Runnable {
     private boolean inCritical = false;
 
     // Switches
-    private final Point SW_A = new Point(17, 7);
-    private final Point SW_B = new Point(15, 9);
-    private final Point SW_C = new Point(4, 9);
-    private final Point SW_D = new Point(3, 11);
+    private final Point SWITCH_B_NORTH = new Point(17, 7);
+    private final Point SWITCH_B_SOUTH = new Point(15, 9);
+    private final Point SWITCH_C_NORTH = new Point(4, 9);
+    private final Point SWITCH_C_SOUTH = new Point(3, 11);
 
     // Station sensors
-    private final Point STATION_N_UPP = new Point(17, 3);
-    private final Point STATION_N_LOW = new Point(17, 5);
-    private final Point STATION_S_UPP = new Point(17, 11);
-    private final Point STATION_S_LOW = new Point(17, 13);
+    private final Point SENSOR_STATION_N_UPPER = new Point(17, 3);
+    private final Point SENSOR_STATION_N_LOWER = new Point(17, 5);
+    private final Point SENSOR_STATION_S_UPPER = new Point(17, 11);
+    private final Point SENSOR_STATION_S_LOWER = new Point(17, 13);
 
     // Critical section A (junction near top)
-    private final Point A_N = new Point(8, 6);
-    private final Point A_S = new Point(9, 8);
-    private final Point A_W = new Point(7, 7);
-    private final Point A_E = new Point(9, 7);
+    private final Point SENSOR_A_NORTH = new Point(8, 6);
+    private final Point SENSOR_A_EAST = new Point(9, 7);
+    private final Point SENSOR_A_SOUTH = new Point(9, 8);
+    private final Point SENSOR_A_WEST = new Point(7, 7);
+
 
     // Critical section B (junction middle right)
-    private final Point B_N_UPP = new Point(16, 7);
-    private final Point B_N_LOW = new Point(16, 8);
-    private final Point B_S_UPP = new Point(14, 9);
-    private final Point B_S_LOW = new Point(14, 10);
+    private final Point SENSOR_B_NORTH_UPPER = new Point(16, 7);
+    private final Point SENSOR_B_NORTH_LOWER = new Point(16, 8);
+    private final Point SENSOR_B_SOUTH_UPPER = new Point(14, 9);
+    private final Point SENSOR_B_SOUTH_LOWER = new Point(14, 10);
 
     // Critical section C (junction bottom left)
-    private final Point C_N_UPP = new Point(5, 9);
-    private final Point C_N_LOW = new Point(5, 10);
-    private final Point C_S_UPP = new Point(4, 11);
-    private final Point C_S_LOW = new Point(3, 12);
+    private final Point SENSOR_C_NORTH_UPPER = new Point(5, 9);
+    private final Point SENSOR_C_NORTH_LOWER = new Point(5, 10);
+    private final Point SENSOR_C_SOUTH_UPPER = new Point(4, 11);
+    private final Point SENSOR_C_SOUTH_LOWER = new Point(3, 12);
+
 
     public TrainBehaveiour(int trainId, int speed, int[] startingPos,
                            Semaphore semA, Semaphore semB, Semaphore semC) {
@@ -112,60 +114,60 @@ public class TrainBehaveiour implements Runnable {
             Point coords = new Point(se.getXpos(), se.getYpos());
 
         // Station sensors
-            if (coords.equals(STATION_N_UPP)) {
+            if (coords.equals(SENSOR_STATION_N_UPPER)) {
                 onStation();
 
-            } else if (coords.equals(STATION_N_LOW)) {
+            } else if (coords.equals(SENSOR_STATION_N_LOWER)) {
                 onStation();
 
-            } else if (coords.equals(STATION_S_UPP)) {
+            } else if (coords.equals(SENSOR_STATION_S_UPPER)) {
                 onStation();
 
-            } else if (coords.equals(STATION_S_LOW)) {
+            } else if (coords.equals(SENSOR_STATION_S_LOWER)) {
                 onStation();
 
         // Critical section A (junction near top)
-            } else if (coords.equals(A_N)) {
+            } else if (coords.equals(SENSOR_A_NORTH)) {
                 onIntersection(this.semA);
 
-            } else if (coords.equals(A_S)) {
+            } else if (coords.equals(SENSOR_A_SOUTH)) {
                 onIntersection(this.semA);
 
 
-            } else if (coords.equals(A_W)) {
+            } else if (coords.equals(SENSOR_A_WEST)) {
                 onIntersection(this.semA);
 
-            } else if (coords.equals(A_E)) {
+            } else if (coords.equals(SENSOR_A_EAST)) {
                 onIntersection(this.semA);
 
         // Critical section B (junction middle right)
-            } else if (coords.equals(B_N_UPP)) {
+            } else if (coords.equals(SENSOR_B_NORTH_UPPER)) {
                 onIntersection(this.semB);
-                doSwitch(SW_A);
-            } else if (coords.equals(B_N_LOW)) {
+                doSwitch(SWITCH_B_NORTH);
+            } else if (coords.equals(SENSOR_B_NORTH_LOWER)) {
                 onIntersection(this.semB);
-                doSwitch(SW_A);
+                doSwitch(SWITCH_B_NORTH);
                 //TODO FIX SWITCHING
-            } else if (coords.equals(B_S_UPP)) {
+            } else if (coords.equals(SENSOR_B_SOUTH_UPPER)) {
                 onIntersection(this.semB);
-                doSwitch(SW_B);
-            } else if (coords.equals(B_S_LOW)) {
+                doSwitch(SWITCH_B_SOUTH);
+            } else if (coords.equals(SENSOR_B_SOUTH_LOWER)) {
                 onIntersection(this.semB);
-                doSwitch(SW_B);
+                doSwitch(SWITCH_B_SOUTH);
 
         // Critical section C (junction bottom left)
-            } else if (coords.equals(C_N_UPP)) {
+            } else if (coords.equals(SENSOR_C_NORTH_UPPER)) {
                 onIntersection(this.semC);
-                doSwitch(SW_C);
-            } else if (coords.equals(C_N_LOW)) {
+                doSwitch(SWITCH_C_NORTH);
+            } else if (coords.equals(SENSOR_C_NORTH_LOWER)) {
                 onIntersection(this.semC);
-                doSwitch(SW_C);
-            } else if (coords.equals(C_S_UPP)) {
+                doSwitch(SWITCH_C_NORTH);
+            } else if (coords.equals(SENSOR_C_SOUTH_UPPER)) {
                 onIntersection(this.semC);
-                doSwitch(SW_D);
-            } else if (coords.equals(C_S_LOW)) {
+                doSwitch(SWITCH_C_SOUTH);
+            } else if (coords.equals(SENSOR_C_SOUTH_LOWER)) {
                 onIntersection(this.semC);
-                doSwitch(SW_D);
+                doSwitch(SWITCH_C_SOUTH);
             } else {
                 System.err.println("Unhandled sensor at " + coords + " for train " + trainId);
             }
