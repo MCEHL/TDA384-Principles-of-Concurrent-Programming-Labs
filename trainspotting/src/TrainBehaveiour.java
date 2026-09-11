@@ -96,19 +96,22 @@ public class TrainBehaveiour implements Runnable {
         if (sensor.equals(SENSOR_B_NORTH_UPPER)) { // 7 on map
 
             if (inCritical) {
-                // den kan inte trigga 7 om den är i critical?
+                // TODO släpp semaforen när tåget lämnar default track, hanteras i sensorEventHandler?
+                // TODO var är tåget om den har triggat 7 och inCritical == true ?
+
             } else {
                 //flip switch_b_north (1) to right
                 tsim.setSwitch(SWITCH_B_NORTH.x, SWITCH_B_NORTH.y, TSimInterface.SWITCH_RIGHT);
 
                 //flip switch_b_south (2) to left
                 tsim.setSwitch(SWITCH_B_SOUTH.x, SWITCH_B_SOUTH.y, TSimInterface.SWITCH_LEFT);
+
             }
 
         } else if (sensor.equals(SENSOR_B_NORTH_LOWER)) { //8 on map
 
             if (inCritical) {
-                // den kan inte trigga 8 om den är i critical?
+                // TODO var är tåget om den har triggat 8 och inCritical == true ?
             } else {
                 //flip switch_b_north (1) to left
                 tsim.setSwitch(SWITCH_B_NORTH.x, SWITCH_B_NORTH.y, TSimInterface.SWITCH_LEFT);
@@ -118,57 +121,94 @@ public class TrainBehaveiour implements Runnable {
             }
 
         } else if (sensor.equals(SENSOR_B_SOUTH_UPPER)) { //9 on map
-            // TODO Make sensor 9 check for semaphore for the north station and switch the switch
+            // TODO Verify semaphore stuff is correct
 
             if (inCritical) {
                 //flip switch_b_south (2) to right
                 tsim.setSwitch(SWITCH_B_SOUTH.x, SWITCH_B_SOUTH.y, TSimInterface.SWITCH_RIGHT);
 
-                // check semaphore for north station and flip switch_B_north (1) accordingly
+                // is default track available?
+                if(this.semN.tryAcquire(1)){
+                    // if yes, direct train to default track
+                    tsim.setSwitch(SWITCH_B_NORTH.x, SWITCH_B_NORTH.y, TSimInterface.SWITCH_RIGHT);
+
+                } else {
+                    //if no, direct train to other track
+                    tsim.setSwitch(SWITCH_B_NORTH.x, SWITCH_B_NORTH.y, TSimInterface.SWITCH_LEFT);
+                }
+
             } else {
                 //den kan inte trigga 9 om den inte är i critical?
             }
 
 
         } else if (sensor.equals(SENSOR_B_SOUTH_LOWER)) { //10 on map
-            // TODO Make sensor 10 check for semaphore for the north station and switch the switch
+            // TODO Verify semaphore stuff is correct
 
             if (inCritical) {
                 //flip switch_b_south (2) to left
                 tsim.setSwitch(SWITCH_B_SOUTH.x, SWITCH_B_SOUTH.y, TSimInterface.SWITCH_LEFT);
 
-                // check semaphore for north station and flip switch_B_north (1) accordingly
+                // is default track available?
+                if(this.semN.tryAcquire(1)){
+                    // if yes, direct train to default track
+                    tsim.setSwitch(SWITCH_B_NORTH.x, SWITCH_B_NORTH.y, TSimInterface.SWITCH_RIGHT);
+
+                } else {
+                    //if no, direct train to other track
+                    tsim.setSwitch(SWITCH_B_NORTH.x, SWITCH_B_NORTH.y, TSimInterface.SWITCH_LEFT);
+                }
+
             } else {
-                //den kan inte trigga 9 om den inte är i critical?
+                // TODO var är tåget om den har triggat 10 och inCritical == false ?
             }
 
         } else if (sensor.equals(SENSOR_C_NORTH_UPPER)) { //11 on map
-            // TODO Make sensor 11 check for semaphore for the south station and switch the switch
+            // TODO Verify semaphore stuff is correct
 
             if (inCritical) {
                 // flip switch_c_north (3) to left
                 tsim.setSwitch(SWITCH_C_NORTH.x, SWITCH_C_NORTH.y, TSimInterface.SWITCH_LEFT);
 
-                // check semaphore for south station and flip switch_c_south (4) accordingly
+                // is default track available?
+                if(this.semS.tryAcquire(1)){
+                    // if yes, direct train to default track
+                    tsim.setSwitch(SWITCH_C_SOUTH.x, SWITCH_C_SOUTH.y, TSimInterface.SWITCH_RIGHT);
+
+                } else {
+                    //if no, direct train to other track
+                    tsim.setSwitch(SWITCH_C_SOUTH.x, SWITCH_C_SOUTH.y, TSimInterface.SWITCH_LEFT);
+                }
+
             } else {
-                // kan inte trigga 11 om den inte är i critical?
+                // TODO var är tåget om den har triggat 11 och inCritical == false ?
             }
 
         } else if (sensor.equals(SENSOR_C_NORTH_LOWER)) { //12 on map
-            // TODO Make sensor 12 check for semaphore for the south station and switch the switch
+            // TODO Verify semaphore stuff is correct
+
             if (inCritical) {
                 // flip switch_c_north (3) to right
                 tsim.setSwitch(SWITCH_C_NORTH.x, SWITCH_C_NORTH.y, TSimInterface.SWITCH_RIGHT);
 
-                // check semaphore for south station and flip switch_c_south (4) accordingly
+                // is default track available?
+                if(this.semS.tryAcquire(1)){
+                    // if yes, direct train to default track
+                    tsim.setSwitch(SWITCH_C_SOUTH.x, SWITCH_C_SOUTH.y, TSimInterface.SWITCH_RIGHT);
+
+                } else {
+                    //if no, direct train to other track
+                    tsim.setSwitch(SWITCH_C_SOUTH.x, SWITCH_C_SOUTH.y, TSimInterface.SWITCH_LEFT);
+                }
+
             } else {
-                // kan inte trigga 12 on inte i critical?
+                // TODO var är tåget om den har triggat 12 och inCritical == false ?
             }
 
         } else if (sensor.equals(SENSOR_C_SOUTH_UPPER)) { //13 on map
 
             if (inCritical) {
-                // den kan inte trigga 13 om den är i critical?
+                // TODO var är tåget om den har triggat 13 och inCritical == true ?
             } else {
                 //flip switch_c_south (4) to left
                 tsim.setSwitch(SWITCH_C_SOUTH.x, SWITCH_C_SOUTH.y, TSimInterface.SWITCH_LEFT);
@@ -180,7 +220,8 @@ public class TrainBehaveiour implements Runnable {
         } else if (sensor.equals(SENSOR_C_SOUTH_LOWER)) { //14 on map
 
             if (inCritical) {
-                // den kan inte trigga 14 om den är i critical?
+                // TODO släpp semaforen när tåget lämnar default track, hanteras i sensorEventHandler?
+                // TODO var är tåget om den har triggat 14 och inCritical == true ?
             } else {
                 //flip switch_c_south (4) to right
                 tsim.setSwitch(SWITCH_C_SOUTH.x, SWITCH_C_SOUTH.y, TSimInterface.SWITCH_RIGHT);
@@ -190,7 +231,7 @@ public class TrainBehaveiour implements Runnable {
             }
 
         } else {
-            //DONT KNOW!
+            // TODO Add stuff here maybe, dunno yet?
         }
 
     }
@@ -205,62 +246,64 @@ public class TrainBehaveiour implements Runnable {
             Point coords = new Point(se.getXpos(), se.getYpos());
 
         // Station sensors
-            if (coords.equals(SENSOR_STATION_N_UPPER)) {
+            if (coords.equals(SENSOR_STATION_N_UPPER)) { // 1 on map
                 onStation();
 
-            } else if (coords.equals(SENSOR_STATION_N_LOWER)) {
+            } else if (coords.equals(SENSOR_STATION_N_LOWER)) { // 2 on map
                 onStation();
 
-            } else if (coords.equals(SENSOR_STATION_S_UPPER)) {
+            } else if (coords.equals(SENSOR_STATION_S_UPPER)) { // 15 on map
                 onStation();
 
-            } else if (coords.equals(SENSOR_STATION_S_LOWER)) {
+            } else if (coords.equals(SENSOR_STATION_S_LOWER)) { // 16 on map
                 onStation();
 
         // Critical section A (junction near top)
-            } else if (coords.equals(SENSOR_A_NORTH)) {
+            } else if (coords.equals(SENSOR_A_NORTH)) { // 3 on map
                 onIntersection(this.semA);
 
-            } else if (coords.equals(SENSOR_A_SOUTH)) {
+            } else if (coords.equals(SENSOR_A_EAST)) { // 4 on map
                 onIntersection(this.semA);
 
-            } else if (coords.equals(SENSOR_A_WEST)) {
+            } else if (coords.equals(SENSOR_A_SOUTH)) { // 5 on map
                 onIntersection(this.semA);
 
-            } else if (coords.equals(SENSOR_A_EAST)) {
+            } else if (coords.equals(SENSOR_A_WEST)) { // 6 on map
                 onIntersection(this.semA);
 
         // Critical section B (junction middle right)
-            } else if (coords.equals(SENSOR_B_NORTH_UPPER)) {
+            }  else if (coords.equals(SENSOR_B_NORTH_UPPER)) { // 7 on map
+                // TODO släpp semaforen när tåget lämnar default track
                 doSwitch(SENSOR_B_NORTH_UPPER);
                 onIntersection(this.semB);
 
-            } else if (coords.equals(SENSOR_B_NORTH_LOWER)) {
+            } else if (coords.equals(SENSOR_B_NORTH_LOWER)) { // 8 on map
                 doSwitch(SENSOR_B_NORTH_LOWER);
                 onIntersection(this.semB);
 
-            } else if (coords.equals(SENSOR_B_SOUTH_UPPER)) {
+            } else if (coords.equals(SENSOR_B_SOUTH_UPPER)) { // 9 on map
                 doSwitch(SENSOR_B_SOUTH_UPPER);
                 onIntersection(this.semB);
 
-            } else if (coords.equals(SENSOR_B_SOUTH_LOWER)) {
+            } else if (coords.equals(SENSOR_B_SOUTH_LOWER)) { // 10 on map
                 doSwitch(SENSOR_B_SOUTH_LOWER);
                 onIntersection(this.semB);
 
         // Critical section C (junction bottom left)
-            } else if (coords.equals(SENSOR_C_NORTH_UPPER)) {
+            } else if (coords.equals(SENSOR_C_NORTH_UPPER)) { // 11 on map
                 doSwitch(SENSOR_C_NORTH_UPPER);
                 onIntersection(this.semC);
 
-            } else if (coords.equals(SENSOR_C_NORTH_LOWER)) {
+            } else if (coords.equals(SENSOR_C_NORTH_LOWER)) { // 12 on map
                 doSwitch(SENSOR_C_NORTH_LOWER);
                 onIntersection(this.semC);
 
-            } else if (coords.equals(SENSOR_C_SOUTH_UPPER)) {
+            } else if (coords.equals(SENSOR_C_SOUTH_UPPER)) { // 13 on map
                 doSwitch(SENSOR_C_SOUTH_UPPER);
                 onIntersection(this.semC);
 
-            } else if (coords.equals(SENSOR_C_SOUTH_LOWER)) {
+            } else if (coords.equals(SENSOR_C_SOUTH_LOWER)) { // 14 on map
+                // TODO släpp semaforen när tåget lämnar default track
                 doSwitch(SENSOR_C_SOUTH_LOWER);
                 onIntersection(this.semC);
 
