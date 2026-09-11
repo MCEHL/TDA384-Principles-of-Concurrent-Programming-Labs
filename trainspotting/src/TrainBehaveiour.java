@@ -94,33 +94,36 @@ public class TrainBehaveiour implements Runnable {
     private void doSwitch(Point sensor) throws CommandException {
 
         if (sensor.equals(SENSOR_B_NORTH_UPPER)) { // 7 on map
-            // TODO Make sensor 7 switch (2) down
-            // TODO Sensors before a switch need to make sure the train dont derail
 
             if (inCritical) {
                 // den kan inte trigga 7 om den är i critical?
             } else {
                 //flip switch_b_north (1) to right
+                tsim.setSwitch(SWITCH_B_NORTH.x, SWITCH_B_NORTH.y, TSimInterface.SWITCH_RIGHT);
+
                 //flip switch_b_south (2) to left
+                tsim.setSwitch(SWITCH_B_SOUTH.x, SWITCH_B_SOUTH.y, TSimInterface.SWITCH_LEFT);
             }
 
         } else if (sensor.equals(SENSOR_B_NORTH_LOWER)) { //8 on map
-            // TODO Make sensor 8 switch (2) down
-            // TODO Sensors before a switch need to make sure the train dont derail
 
             if (inCritical) {
                 // den kan inte trigga 8 om den är i critical?
             } else {
                 //flip switch_b_north (1) to left
+                tsim.setSwitch(SWITCH_B_NORTH.x, SWITCH_B_NORTH.y, TSimInterface.SWITCH_LEFT);
+
                 //flip switch_b_south (2) to left
+                tsim.setSwitch(SWITCH_B_SOUTH.x, SWITCH_B_SOUTH.y, TSimInterface.SWITCH_LEFT);
             }
 
         } else if (sensor.equals(SENSOR_B_SOUTH_UPPER)) { //9 on map
             // TODO Make sensor 9 check for semaphore for the north station and switch the switch
-            // TODO Sensors before a switch need to make sure the train dont derail
 
             if (inCritical) {
                 //flip switch_b_south (2) to right
+                tsim.setSwitch(SWITCH_B_SOUTH.x, SWITCH_B_SOUTH.y, TSimInterface.SWITCH_RIGHT);
+
                 // check semaphore for north station and flip switch_B_north (1) accordingly
             } else {
                 //den kan inte trigga 9 om den inte är i critical?
@@ -129,10 +132,11 @@ public class TrainBehaveiour implements Runnable {
 
         } else if (sensor.equals(SENSOR_B_SOUTH_LOWER)) { //10 on map
             // TODO Make sensor 10 check for semaphore for the north station and switch the switch
-            // TODO Sensors before a switch need to make sure the train dont derail
 
             if (inCritical) {
                 //flip switch_b_south (2) to left
+                tsim.setSwitch(SWITCH_B_SOUTH.x, SWITCH_B_SOUTH.y, TSimInterface.SWITCH_LEFT);
+
                 // check semaphore for north station and flip switch_B_north (1) accordingly
             } else {
                 //den kan inte trigga 9 om den inte är i critical?
@@ -140,10 +144,11 @@ public class TrainBehaveiour implements Runnable {
 
         } else if (sensor.equals(SENSOR_C_NORTH_UPPER)) { //11 on map
             // TODO Make sensor 11 check for semaphore for the south station and switch the switch
-            // TODO Sensors before a switch need to make sure the train dont derail
 
             if (inCritical) {
                 // flip switch_c_north (3) to left
+                tsim.setSwitch(SWITCH_C_NORTH.x, SWITCH_C_NORTH.y, TSimInterface.SWITCH_LEFT);
+
                 // check semaphore for south station and flip switch_c_south (4) accordingly
             } else {
                 // kan inte trigga 11 om den inte är i critical?
@@ -151,34 +156,37 @@ public class TrainBehaveiour implements Runnable {
 
         } else if (sensor.equals(SENSOR_C_NORTH_LOWER)) { //12 on map
             // TODO Make sensor 12 check for semaphore for the south station and switch the switch
-            // TODO Sensors before a switch need to make sure the train dont derail
             if (inCritical) {
                 // flip switch_c_north (3) to right
+                tsim.setSwitch(SWITCH_C_NORTH.x, SWITCH_C_NORTH.y, TSimInterface.SWITCH_RIGHT);
+
                 // check semaphore for south station and flip switch_c_south (4) accordingly
             } else {
                 // kan inte trigga 12 on inte i critical?
             }
 
         } else if (sensor.equals(SENSOR_C_SOUTH_UPPER)) { //13 on map
-            // TODO Make sensor 13 switch (4) up
-            // TODO Sensors before a switch need to make sure the train dont derail
 
             if (inCritical) {
                 // den kan inte trigga 13 om den är i critical?
             } else {
                 //flip switch_c_south (4) to left
+                tsim.setSwitch(SWITCH_C_SOUTH.x, SWITCH_C_SOUTH.y, TSimInterface.SWITCH_LEFT);
+
                 //flip switch_c_north (3) to left
+                tsim.setSwitch(SWITCH_C_NORTH.x, SWITCH_C_NORTH.y, TSimInterface.SWITCH_LEFT);
             }
 
         } else if (sensor.equals(SENSOR_C_SOUTH_LOWER)) { //14 on map
-            // TODO Make sensor 14 switch (4) down
-            // TODO Sensors before a switch need to make sure the train dont derail
 
             if (inCritical) {
                 // den kan inte trigga 14 om den är i critical?
             } else {
                 //flip switch_c_south (4) to right
+                tsim.setSwitch(SWITCH_C_SOUTH.x, SWITCH_C_SOUTH.y, TSimInterface.SWITCH_RIGHT);
+
                 //flip switch_c_north (3) to left
+                tsim.setSwitch(SWITCH_C_NORTH.x, SWITCH_C_NORTH.y, TSimInterface.SWITCH_LEFT);
             }
 
         } else {
