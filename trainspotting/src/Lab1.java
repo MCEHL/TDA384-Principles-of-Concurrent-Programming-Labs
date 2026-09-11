@@ -24,8 +24,8 @@ public class Lab1 {
     Semaphore semS =  new Semaphore(1); // SOUTH section, lower track default/critical section
 
 
-    Thread train1 = new Thread(new TrainBehaveiour(1, speed1, semA, semB, semC, semN, semS));
-    Thread train2 = new Thread(new TrainBehaveiour(2, speed2, semA, semB, semC, semN, semS));
+    Thread train1 = new Thread(new TrainBehaviour(1, speed1, semA, semB, semC, semN, semS));
+    Thread train2 = new Thread(new TrainBehaviour(2, speed2, semA, semB, semC, semN, semS));
 
     train1.start();
     train2.start();

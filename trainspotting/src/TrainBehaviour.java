@@ -3,9 +3,9 @@ import TSim.*;
 import java.awt.*;
 import java.util.concurrent.Semaphore;
 
-//TODO Change the execution order to make the switching happend after the semaphore lock
+//TODO Change the execution order to make the switching happened after the semaphore lock
 
-public class TrainBehaveiour implements Runnable {
+public class TrainBehaviour implements Runnable {
     private int trainId = -1;
     private int speed = 0;
     private TSimInterface tsim;
@@ -49,8 +49,8 @@ public class TrainBehaveiour implements Runnable {
     private final Point SENSOR_C_SOUTH_LOWER = new Point(3, 12);
 
 
-    public TrainBehaveiour(int trainId, int speed,
-                           Semaphore semA, Semaphore semB, Semaphore semC, Semaphore semN, Semaphore semS) {
+    public TrainBehaviour(int trainId, int speed,
+                          Semaphore semA, Semaphore semB, Semaphore semC, Semaphore semN, Semaphore semS) {
         this.trainId = trainId;
         this.speed = speed;
         this.semA = semA; // Junction A
@@ -138,7 +138,7 @@ public class TrainBehaveiour implements Runnable {
                 }
 
             } else {
-                //den kan inte trigga 9 om den inte är i critical?
+                // TODO var är tåget om den har triggat 9 och inCritical == false ?
             }
 
 
