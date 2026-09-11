@@ -82,11 +82,12 @@ public class TrainBehaviour implements Runnable {
     private void onIntersection(Semaphore sem) throws InterruptedException, CommandException {
         if(inCritical){
             sem.release();
+            inCritical = false;
         }
         else{
             tsim.setSpeed(this.trainId, 0); // stop at junction
             sem.acquire(); // check if train can cross
-            inCritical = !inCritical;
+            inCritical = true;
             tsim.setSpeed(this.trainId, this.speed); // when allowed to cross, start driving
         }
     }
